@@ -13,6 +13,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     Contact contact;
 
     String[] projection = new String[] {
-            ContactsContract.Contacts.DISPLAY_NAME,
+            ContactsContract.Contacts.DISPLAY_NAME
     };
 
     @Override
@@ -61,30 +62,41 @@ public class MainActivity extends AppCompatActivity {
 
         }else {
 
-            Cursor phones = getContentResolver().query(uri,
-                    projection, null,
-                    null, ContactsContract.Contacts.SORT_KEY_PRIMARY + " ASC");
+          //  Cursor phones = getContentResolver().query(uri,
+         //           null, null,
+         //           null, ContactsContract.Contacts.SORT_KEY_PRIMARY + " ASC");
 
-            int indexName = phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
-           // int indexID = phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone._ID);
+         //   int indexName = phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+          //  int indexNumber = phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
 
 
+            ContentResolver cr = getContentResolver();
+            Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null,
+                    null, null, ContactsContract.Contacts.SORT_KEY_PRIMARY + " ASC");
 
-            if (phones.moveToFirst()) {
+            if (cur.getCount() > 0) {
 
-                do {
-
-                    name = phones.getString(indexName);
-                    System.out.println("---" + name);
-
+                while (cur.moveToNext()) {
+                    String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
+                    String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                    //Log.i("Names", name);
                     contact = new Contact(name);
                     listContact.add(contact);
 
-                } while (phones.moveToNext());
+                    if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0)
+                    {
+                        // Query phone here. Covered next
+                        Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = "+ id,null, null);
+                        while (phones.moveToNext()) {
+                            String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                          //  Log.i("Number", phoneNumber);
+                            contact.setListPhone(phoneNumber);
+                        }
+                        phones.close();
+                    }
 
+                }
             }
-
-            phones.close();
 
             mAdapter.notifyDataSetChanged();
         }
