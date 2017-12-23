@@ -27,14 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private LineAdapter mAdapter;
     private List<Contact> listContact = new ArrayList<>();
-    String phoneNumber, name;
-    Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-    private List<String> listcompare = new ArrayList<>();
     Contact contact;
-
-    String[] projection = new String[] {
-            ContactsContract.Contacts.DISPLAY_NAME
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
