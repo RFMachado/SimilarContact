@@ -8,19 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Rafael on 24/11/2017.
  */
 
-public class LineAdapter extends RecyclerView.Adapter<LineAdapter.ViewHolder> {
+public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
 
     List<Contact> listContact ;
 
-    public LineAdapter(List<Contact> listContact){
+    public ContactAdapter(List<Contact> listContact){
         this.listContact = listContact;
     }
 
@@ -59,9 +57,9 @@ public class LineAdapter extends RecyclerView.Adapter<LineAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView name;
 
-        public ViewHolder(View view) {
-            super(view);
-            name =  view.findViewById(R.id.name);
+        public ViewHolder(View itemView) {
+            super(itemView);
+            name =  itemView.findViewById(R.id.name);
 
         }
     }

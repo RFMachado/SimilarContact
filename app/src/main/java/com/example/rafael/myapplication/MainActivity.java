@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.ContentResolver;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Build;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
@@ -13,19 +12,15 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
     private RecyclerView recyclerView;
-    private LineAdapter mAdapter;
+    private ContactAdapter mAdapter;
     private List<Contact> listContact = new ArrayList<>();
     Contact contact;
 
@@ -36,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.rv);
 
-        mAdapter = new LineAdapter(listContact);
+        mAdapter = new ContactAdapter(listContact);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -54,15 +49,6 @@ public class MainActivity extends AppCompatActivity {
             requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
 
         }else {
-
-          //  Cursor phones = getContentResolver().query(uri,
-         //           null, null,
-         //           null, ContactsContract.Contacts.SORT_KEY_PRIMARY + " ASC");
-
-         //   int indexName = phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
-          //  int indexNumber = phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-
-
             ContentResolver cr = getContentResolver();
             Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null,
                     null, null, ContactsContract.Contacts.SORT_KEY_PRIMARY + " ASC");
