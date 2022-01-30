@@ -1,53 +1,27 @@
-package com.example.rafael.myapplication;
+package com.example.rafael.myapplication
 
-import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
-import java.util.List;
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.example.rafael.myapplication.databinding.LineAdapterBinding
 
 /**
  * Created by Rafael on 24/12/2017.
  */
+class PhoneAdapter(var listPhone: List<String>) : RecyclerView.Adapter<PhoneAdapter.ViewHolder>() {
 
-public class PhoneAdapter extends RecyclerView.Adapter<PhoneAdapter.ViewHolder> {
-
-    List<String> listPhone;
-
-    public PhoneAdapter(List<String> phone){
-        this.listPhone = phone;
-    }
-
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.line_adapter, parent, false);
-
-        return new ViewHolder(itemView);
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        final String phone = listPhone.get(position);
-        final Context context = holder.itemView.getContext();
-
-        holder.name.setText(phone);
-    }
-
-    @Override
-    public int getItemCount() {
-        return listPhone.size();
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView name;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            name =  itemView.findViewById(R.id.name);
+    inner class ViewHolder(private val itemBinding: LineAdapterBinding) : RecyclerView.ViewHolder(itemBinding.root) {
+        fun bind(phoneName: String) = with(itemBinding) {
+            name.text = phoneName
         }
+    }
+
+    override fun getItemCount() = listPhone.size
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(listPhone[position])
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val itemView = LineAdapterBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        )
+        return ViewHolder(itemView)
     }
 }
