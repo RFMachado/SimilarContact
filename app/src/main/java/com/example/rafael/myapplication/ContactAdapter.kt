@@ -1,7 +1,6 @@
 package com.example.rafael.myapplication
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rafael.myapplication.databinding.LineAdapterBinding
@@ -11,15 +10,15 @@ import com.example.rafael.myapplication.databinding.LineAdapterBinding
  */
 class ContactAdapter(
     private var listContact: List<Contact>,
-    private val listener: () -> Unit
+    private val listener: (Contact) -> Unit
 ) :
     RecyclerView.Adapter<ContactAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val itemBinding: LineAdapterBinding) : RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(contact: Contact) = with(itemBinding) {
             name.text = contact.name
-            root.setOnClickListener { v: View? ->
-                listener.invoke()
+            root.setOnClickListener {
+                listener.invoke(contact)
             }
         }
     }

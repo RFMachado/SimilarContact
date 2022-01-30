@@ -10,12 +10,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rafael.myapplication.databinding.ActivityDetailContactBinding
 
 class DetailContact : AppCompatActivity() {
-    lateinit var contact: Contact
+    var contact: Contact? = null
     private var mAdapter: PhoneAdapter? = null
     lateinit var binding: ActivityDetailContactBinding
 
     companion object {
-        fun launchIntent(context: Context) = Intent(context, DetailContact::class.java)
+        const val EXTRA_CONTACT = "contact"
+
+        fun launchIntent(context: Context, contact: Contact): Intent {
+            val intent = Intent(context, DetailContact::class.java)
+            intent.putExtra(EXTRA_CONTACT, contact)
+            return intent
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,16 +29,21 @@ class DetailContact : AppCompatActivity() {
         binding = ActivityDetailContactBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        contact = intent.getSerializableExtra("contact") as Contact
+        contact = intent.getSerializableExtra(EXTRA_CONTACT) as? Contact
         bindViews()
     }
 
     private fun bindViews() = with(binding) {
-        mAdapter = PhoneAdapter(contact.listPhones)
+        contact?.listPhones?.let {
+            mAdapter = PhoneAdapter(it)
 
-        recyclerView.itemAnimator = DefaultItemAnimator()
-        recyclerView.addItemDecoration(DividerItemDecoration(this@DetailContact, LinearLayoutManager.VERTICAL))
-        recyclerView.adapter = mAdapter
+            recyclerView.apply {
+                itemAnimator = DefaultItemAnimator()
+                addItemDecoration(DividerItemDecoration(this@DetailContact, LinearLayoutManager.VERTICAL))
+                adapter = mAdapter
+            }
+        }
+
         mAdapter?.notifyDataSetChanged()
     }
 

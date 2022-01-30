@@ -8,7 +8,7 @@ import com.example.rafael.myapplication.databinding.LineAdapterBinding
 /**
  * Created by Rafael on 24/12/2017.
  */
-class PhoneAdapter(var listPhone: List<String>) : RecyclerView.Adapter<PhoneAdapter.ViewHolder>() {
+class PhoneAdapter(private var listPhone: List<String>) : RecyclerView.Adapter<PhoneAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val itemBinding: LineAdapterBinding) : RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(phoneName: String) = with(itemBinding) {

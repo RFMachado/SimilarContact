@@ -1,7 +1,6 @@
 package com.example.rafael.myapplication
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -25,22 +24,18 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        mAdapter = ContactAdapter(listContact) {
-            val intent = DetailContact.launchIntent(this).apply {
-                intent.putExtra("contact", contact)
-            }
-
-            startActivity(intent)
+        mAdapter = ContactAdapter(listContact) { contact ->
+            startActivity(DetailContact.launchIntent(this, contact))
         }
 
         bindViews()
         populateList()
     }
 
-    private fun bindViews() = with(binding) {
-        recyclerView.itemAnimator = DefaultItemAnimator()
-        recyclerView.addItemDecoration(DividerItemDecoration(this@MainActivity, LinearLayoutManager.VERTICAL))
-        recyclerView.adapter = mAdapter
+    private fun bindViews() = with(binding.recyclerView) {
+        itemAnimator = DefaultItemAnimator()
+        addItemDecoration(DividerItemDecoration(this@MainActivity, LinearLayoutManager.VERTICAL))
+        adapter = mAdapter
     }
 
     private fun populateList() {
